@@ -55,20 +55,19 @@ def main():
     line = pygame.Surface(size)
 
     GRID_W = generate_grid_points(BLOCK_SIZE[0], WIN_WIDTH)
+    GRID_H = generate_grid_points(BLOCK_SIZE[1], WIN_HEIGHT)
 
     for w in GRID_W:
         pygame.draw.line(line, BLACK, (0, w), (w, WIN_HEIGHT))
         screen.blit(line, (w, 0))
 
-    # size = (WIN_WIDTH, 1)
-    # line = pygame.Surface(size)
-    # for w in range(0, int(GRID_H)):
-    #     pygame.draw.line(line, pygame.Color(
-    #         0, 0, 0), (0, BLOCK_SIZE[0] * w), (WIN_WIDTH, BLOCK_SIZE[0] * w))
-    #     screen.blit(line, (0, BLOCK_SIZE[0]*w))
+    size = (WIN_WIDTH, 1)
+    line = pygame.Surface(size)
 
-    pygame.draw.line(line, RED, (0, 0), (0, WIN_HEIGHT))
-    screen.blit(line, (0, 0))
+    for h in GRID_H:
+        pygame.draw.line(line, BLACK, (0, h), (WIN_WIDTH, h))
+        screen.blit(line, (0, h))
+
 
     while(running):
         for event in pygame.event.get():
