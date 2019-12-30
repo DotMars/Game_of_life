@@ -7,8 +7,17 @@ import numpy as np
 WIN_WIDTH = 221
 WIN_HEIGHT = 221
 
-GRID_W = (WIN_WIDTH - 1 - WIN_WIDTH/10)/10
+GRID_W = int((WIN_WIDTH - 1 - WIN_WIDTH/10)/10)
 GRID_H = 20
+
+grid = (np.arange(0, GRID_W), np.arange(0, GRID_H))
+grid = [0 for i in range(GRID_W) for j in range(GRID_H)]
+grid = np.array([np.arange(GRID_W), np.arange(GRID_H)])
+
+
+# print(np.shape(grid))
+# print(grid)
+# exit()
 
 
 def get_block_size_From_win_dims(x, y):
@@ -68,11 +77,16 @@ def main():
         pygame.draw.line(line, BLACK, (0, h), (WIN_WIDTH, h))
         screen.blit(line, (0, h))
 
-
     while(running):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                raise SystemExit("QUIT")
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                raise SystemExit("ESCAPE")
+            if event.type == KEYDOWN and event.key == K_KP_ENTER:
+                print("Game of life starting")
+            if event.type == MOUSEBUTTONUP:
+                print(int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0]))
 
         pygame.display.update()
 
