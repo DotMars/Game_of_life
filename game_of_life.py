@@ -10,44 +10,39 @@ WIN_HEIGHT = 221
 GRID_W = int((WIN_WIDTH - 1 - WIN_WIDTH/10)/10)
 GRID_H = 20
 
-grid = (np.arange(0, GRID_W), np.arange(0, GRID_H))
+
+grid = (np.arange(0, GRID_W), np.arange(0, GRID_W))
 grid = [0 for i in range(GRID_W) for j in range(GRID_H)]
 grid = np.array([np.arange(GRID_W), np.arange(GRID_H)])
 
 
-# print(np.shape(grid))
-# print(grid)
-# exit()
-
-
-def get_block_size_From_win_dims(x, y):
-    block_x = 10
-    block_y = 10
-    return (block_x, block_y)
-
-
-BLOCK_SIZE = get_block_size_From_win_dims(WIN_WIDTH, WIN_HEIGHT)
+BLOCK_SIZE = (10, 10)
 
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 DEPTH = 32
 FLAGS = 0
 
-DEBUG = 0
 
 BLACK = pygame.Color(0, 0, 0)
 RED = pygame.Color(255, 0, 0)
 
 
-def draw_grid(dims=(WIN_WIDTH/10, WIN_HEIGHT/10), block_size=BLOCK_SIZE):
-    print(dims)
+def draw_block(screen, grid_w = 0, grid_h = 0):
+    # block_pos_x = int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0])*BLOCK_SIZE[0]
+    # block_pos_y = int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])*BLOCK_SIZE[1]
+    block_pos_x = grid_w[int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0])]
+    block_pos_y = grid_h[int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])]
 
+    pygame.draw.rect(screen, RED, (block_pos_x, block_pos_y, BLOCK_SIZE[0], BLOCK_SIZE[1]))
+    print(int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0]))
+    print(int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1]))
 
 def check_neighborhood(pos):
     pass
 
 
 def generate_grid_points(block_Size, max_position):
-    return np.arange(0, max_position, block_Size+1)
+    return np.arange(0, max_position, block_Size)
 
 
 def main():
@@ -65,7 +60,7 @@ def main():
 
     GRID_W = generate_grid_points(BLOCK_SIZE[0], WIN_WIDTH)
     GRID_H = generate_grid_points(BLOCK_SIZE[1], WIN_HEIGHT)
-
+    print(GRID_W)
     for w in GRID_W:
         pygame.draw.line(line, BLACK, (0, w), (w, WIN_HEIGHT))
         screen.blit(line, (w, 0))
@@ -77,7 +72,7 @@ def main():
         pygame.draw.line(line, BLACK, (0, h), (WIN_WIDTH, h))
         screen.blit(line, (0, h))
 
-    while(running):
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 raise SystemExit("QUIT")
@@ -86,9 +81,9 @@ def main():
             if event.type == KEYDOWN and event.key == K_KP_ENTER:
                 print("Game of life starting")
             if event.type == MOUSEBUTTONUP:
-                print(int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0]))
-
+                draw_block(screen, GRID_W, GRID_H)
+                
+                
         pygame.display.update()
-
 
 main()
