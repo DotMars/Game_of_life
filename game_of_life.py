@@ -91,40 +91,36 @@ def update_grid(screen, gride):
             if jplusone > len(grid[i])-1: jplusone = len(grid[i])-1
 
             cell_population = grid[i-1][j-1] + grid[i][j-1] + grid[iplusone][j-1] + grid[i-1][j] + grid[i][j] + grid[iplusone][j] + grid[i-1][jplusone] + grid[i][jplusone] + grid[iplusone][jplusone]
-            
-            if cell_population > 3:
-                print("Blaaaaaaaaaaaaaaaaaaaaaaaatant")
-
-            death_count = 0
-
-
-            if cell == 1 :
+            # if cell_population > 3:
+            #     print("Check mateeeeeeeeeeeeeeeee")
+            #     exit()
+            overpop = 0
+            if cell == 1:
                 if underpopulation(cell_population):
                     lonely = (i, j)
                     print("Cell ", lonely, " died of loneliness")
                     grid[i][j] = 0
-                    death_count += 1
+                    exit()
                     break
                 if overpopulation(cell_population):
                     overpopulated = (i, j)
                     print("Cell ", overpopulated, "died of overpuplation")
                     grid[i][j] = 0
-                    death_count += 1
-                    break
-            else:
-                if reproduction(cell_population):
-                    reproduced = (i, j)
-                    print("Reproduced at", reproduced)
-                    grid[i][j] = 1
+                    overpop = 1
+                    exit()
                     break
 
-            if next_generation(cell_population):
+            if next_generation(cell_population) and overpop == 0:
                     grid[i][j] = 1
                     newborn = (i, j)
                     print("New born at ", newborn)
                     break
+            if reproduction(cell_population) and overpop == 0:
+                    reproduced = (i, j)
+                    print("Reproduced at", reproduced)
+                    grid[i][j] = 1
+                    break
             
-            print(death_count)
                 
 
 
@@ -164,7 +160,7 @@ def main():
                 # j = int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])
 
         if running:
-            time.sleep(2)
+            # time.sleep()
             update_grid(screen, grid)
             draw_grid(screen, GRID_W, GRID_H, grid)
             
