@@ -20,7 +20,8 @@ def overpopulation(x): #Any live cell with more than three live neighbours dies,
 def reproduction(x): #Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
     if x == 3:
         return 1
-    else: return 0
+    else: 
+        return 0
 
 
 import pygame
@@ -100,29 +101,26 @@ def update_grid(screen, gride):
                     lonely = (i, j)
                     print("Cell ", lonely, " died of loneliness")
                     grid[i][j] = 0
-                    exit()
-                    break
+
                 if overpopulation(cell_population):
                     overpopulated = (i, j)
-                    print("Cell ", overpopulated, "died of overpuplation")
+                    print("Overpopulation at ", overpopulated)
                     grid[i][j] = 0
                     overpop = 1
-                    exit()
-                    break
 
-            if next_generation(cell_population) and overpop == 0:
+                if next_generation(cell_population) and overpop == 0:
                     grid[i][j] = 1
                     newborn = (i, j)
-                    print("New born at ", newborn)
-                    break
-            if reproduction(cell_population) and overpop == 0:
-                    reproduced = (i, j)
-                    print("Reproduced at", reproduced)
-                    grid[i][j] = 1
-                    break
-            
+                    print("New born at ", newborn, overpop)
                 
 
+            if reproduction(cell_population) and overpop == 0:
+                    reproduced = (i, j)
+                    print("Reproduced at", reproduced, grid[i][j])
+
+                    grid[i][j] = 1
+                    
+                    
 
 def generate_grid_points(block_Size, max_position):
     return np.arange(0, max_position, block_Size)
