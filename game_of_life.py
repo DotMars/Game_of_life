@@ -83,6 +83,7 @@ def draw_grid(screen, x_coordinates, y_coordinates, grid):
 
 def update_grid(screen, gride):
     global grid
+    new_grid = np.copy(grid)
     for i in range(len(grid)):
         iplusone = i + 1
         if iplusone > len(grid)-1 : iplusone = len(grid)-1
@@ -92,24 +93,23 @@ def update_grid(screen, gride):
             if jplusone > len(grid[i])-1: jplusone = len(grid[i])-1
 
             cell_population = grid[i-1][j-1] + grid[i][j-1] + grid[iplusone][j-1] + grid[i-1][j] + grid[i][j] + grid[iplusone][j] + grid[i-1][jplusone] + grid[i][jplusone] + grid[iplusone][jplusone]
-            # if cell_population > 3:
-            #     print("Check mateeeeeeeeeeeeeeeee")
-            #     exit()
+
             overpop = 0
             if cell == 1:
+                cell_population -= 1
                 if underpopulation(cell_population):
                     lonely = (i, j)
                     print("Cell ", lonely, " died of loneliness")
-                    grid[i][j] = 0
+                    new_grid[i][j] = 0
 
                 if overpopulation(cell_population):
                     overpopulated = (i, j)
                     print("Overpopulation at ", overpopulated)
-                    grid[i][j] = 0
+                    new_grid[i][j] = 0
                     overpop = 1
 
                 if next_generation(cell_population) and overpop == 0:
-                    grid[i][j] = 1
+                    new_grid[i][j] = 1
                     newborn = (i, j)
                     print("New born at ", newborn, overpop)
                 
@@ -118,7 +118,8 @@ def update_grid(screen, gride):
                     reproduced = (i, j)
                     print("Reproduced at", reproduced, grid[i][j])
 
-                    grid[i][j] = 1
+                    new_grid[i][j] = 1
+    grid = np.copy(new_grid)
                     
                     
 
