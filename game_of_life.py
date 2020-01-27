@@ -39,7 +39,6 @@ DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 DEPTH = 32
 FLAGS = 0
 
-# grid = [[False]*int(WIN_WIDTH/BLOCK_SIZE[0])]*int(WIN_HEIGHT/BLOCK_SIZE[1]) ### THIS DOESN'T WORK ###
 grid = np.array([[0]*int(WIN_WIDTH/BLOCK_SIZE[0])]*int(WIN_HEIGHT/BLOCK_SIZE[1]), np.int32)
 
 BLACK = pygame.Color(0, 0, 0)
@@ -48,6 +47,9 @@ BLUE = pygame.Color(0, 0, 255)
 WHITE = pygame.Color(255,255,255)
 
 def draw_block():
+    """  
+    A function that draws a block representing a life cell in the grid case where the mouse is currently pointing
+    """
     i = int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0])
     j = int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])
 
@@ -58,6 +60,9 @@ def draw_block():
         grid[i][j] = False
 
 def draw_grid(screen, x_coordinates, y_coordinates, grid):
+    """  
+    A function that draws an empty grid on the screen. It's used multiple times to reset the grid.
+    """
     screen.fill((255, 255, 255))
     
     for i in range(len(grid)):
@@ -83,6 +88,9 @@ def draw_grid(screen, x_coordinates, y_coordinates, grid):
         screen.blit(line, (0, h))
 
 def update_grid(screen, gride):
+    """  
+    A function that translates all the ones in the array grid into active cells on the screen.
+    """
     global grid
     new_grid = np.copy(grid)
     for i in range(len(grid)):
@@ -125,6 +133,9 @@ def update_grid(screen, gride):
                     
 
 def generate_grid_points(block_Size, max_position):
+    """  
+    A function that returns a range of positions depending on the block size and maximum linear position.
+    """
     return np.arange(0, max_position, block_Size)
 
 
@@ -156,11 +167,7 @@ def main():
                 draw_block()
                 draw_grid(screen, GRID_W, GRID_H, grid)
 
-                # i = int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0])
-                # j = int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])
-
         if running:
-            # time.sleep()
             update_grid(screen, grid)
             draw_grid(screen, GRID_W, GRID_H, grid)
             
