@@ -49,6 +49,9 @@ RED = pygame.Color(255, 0, 0)
 BLUE = pygame.Color(0, 0, 255)
 WHITE = pygame.Color(255,255,255)
 
+# Debug
+DEBUG = 0
+
 def draw_block():
     """
     A function that draws a block representing a life cell in the grid case where the mouse is currently pointing
@@ -169,7 +172,7 @@ def main():
     GRID_H = generate_grid_lines_coordinates(BLOCK_SIZE[1], WIN_HEIGHT)
 
     # Draw the grid on the screen
-    draw_grid(screen, GRID_W, GRID_H, grid)
+    draw_grid(screen, GRID_W, GRID_H)
 
     while 1:
         # Main loop
@@ -192,12 +195,12 @@ def main():
             # Mouse click
             if event.type == MOUSEBUTTONDOWN and running == False:
                 draw_block()
-                draw_grid(screen, GRID_W, GRID_H, grid)
+                draw_grid(screen, GRID_W, GRID_H)
 
         # If the simulation has started -> update the grid on the screen
         if running:
-            update_grid(screen, grid)
-            draw_grid(screen, GRID_W, GRID_H, grid)
+            update_grid(screen)
+            draw_grid(screen, GRID_W, GRID_H)
 
         # Draw the new frame on the screen
         pygame.display.update()
