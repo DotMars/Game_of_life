@@ -1,12 +1,13 @@
-#########################################################################################################
-################# Conway's game of life #################################################################
-#########################################################################################################
+###################################
+# __author__ = dotMars
+# __name__ = Conway's game of life
+###
 
-################# Rules ##################################################################################
+################# Rules
 def underpopulation(x): #Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-    if x < 2: 
+    if x < 2:
         return 1
-    else: 
+    else:
         return 0
 def next_generation(x): #Any live cell with two or three live neighbours lives on to the next generation.
     if x == 2 or x == 3:
@@ -16,12 +17,12 @@ def next_generation(x): #Any live cell with two or three live neighbours lives o
 def overpopulation(x): #Any live cell with more than three live neighbours dies, as if by overpopulation.
     if x > 3:
         return 1
-    else: 
+    else:
         return 0
 def reproduction(x): #Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
     if x == 3:
         return 1
-    else: 
+    else:
         return 0
 
 
@@ -30,25 +31,29 @@ from pygame import *
 import numpy as np
 import time
 
+# Pygame isplay settings
 WIN_WIDTH = 500
 WIN_HEIGHT = 500
-
-BLOCK_SIZE = (10, 10)
 
 DISPLAY = (WIN_WIDTH, WIN_HEIGHT)
 DEPTH = 32
 FLAGS = 0
 
+# Grid settings
+BLOCK_SIZE = (10, 10)
 grid = np.array([[0]*int(WIN_WIDTH/BLOCK_SIZE[0])]*int(WIN_HEIGHT/BLOCK_SIZE[1]), np.int32)
 
+# Pygame colors
 BLACK = pygame.Color(0, 0, 0)
 RED = pygame.Color(255, 0, 0)
 BLUE = pygame.Color(0, 0, 255)
 WHITE = pygame.Color(255,255,255)
 
 def draw_block():
-    """  
+    """
     A function that draws a block representing a life cell in the grid case where the mouse is currently pointing
+    Args : None
+    Return : None
     """
     i = int(pygame.mouse.get_pos()[0]/BLOCK_SIZE[0])
     j = int(pygame.mouse.get_pos()[1]/BLOCK_SIZE[1])
@@ -59,12 +64,16 @@ def draw_block():
     elif grid[i][j] == True:
         grid[i][j] = False
 
-def draw_grid(screen, x_coordinates, y_coordinates, grid):
-    """  
-    A function that draws an empty grid on the screen. It's used multiple times to reset the grid.
+def draw_grid(screen, x_coordinates, y_coordinates):
     """
+    A function that draws an empty grid on the screen. It's used multiple times to reset the grid.
+    Args :  - screen : A pygame surface to draw the grid on
+            - x_coordinates : grid lines positions on the x axis
+            - y_cooridnates : grid lines positions on the y axis
+    """
+    global grid
     screen.fill((255, 255, 255))
-    
+
     for i in range(len(grid)):
 
         for j in range(len(grid[i])):
@@ -73,10 +82,10 @@ def draw_grid(screen, x_coordinates, y_coordinates, grid):
                 block_pos_y = y_coordinates[j]
 
                 pygame.draw.rect(screen, BLUE, (block_pos_x, block_pos_y, BLOCK_SIZE[0], BLOCK_SIZE[1]))
-               # print("Active life @ X: ", block_pos_x, ", Y: ", block_pos_y)
+                if DEBUG : print("Active life @ X: ", block_pos_x, ", Y: ", block_pos_y)
 
     size = (1, WIN_HEIGHT)
-    line = pygame.Surface(size) 
+    line = pygame.Surface(size)
     for w in x_coordinates:
         pygame.draw.line(line, BLACK, (0, w), (w, WIN_HEIGHT))
         screen.blit(line, (w, 0))
@@ -87,9 +96,11 @@ def draw_grid(screen, x_coordinates, y_coordinates, grid):
         pygame.draw.line(line, BLACK, (0, h), (WIN_WIDTH, h))
         screen.blit(line, (0, h))
 
-def update_grid(screen, gride):
-    """  
+def update_grid(screen):
+    """
     A function that translates all the ones in the array grid into active cells on the screen.
+    Args : - screen pygame surface to draw the updated grid on
+    Return : - None
     """
     global grid
     new_grid = np.copy(grid)
@@ -121,7 +132,6 @@ def update_grid(screen, gride):
                     new_grid[i][j] = 1
                     newborn = (i, j)
                     print("New born at ", newborn, overpop)
-                
 
             if reproduction(cell_population) and overpop == 0:
                     reproduced = (i, j)
@@ -129,49 +139,69 @@ def update_grid(screen, gride):
 
                     new_grid[i][j] = 1
     grid = np.copy(new_grid)
-                    
-                    
 
-def generate_grid_points(block_Size, max_position):
-    """  
-    A function that returns a range of positions depending on the block size and maximum linear position.
+def generate_grid_lines_coordinates(block_size, max_position):
     """
-    return np.arange(0, max_position, block_Size)
+    Returns a range of positions depending on the block size and maximum linear position.
+    Args : block_size : size of a single grid block, must be constante for all blocks
+    Return : numpy array with grid lines cooridnates
+    """
+    return np.arange(0, max_position, block_size)
 
 
 def main():
+    """
+    Main game function
+    """
+
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, FLAGS, DEPTH)
     pygame.display.set_caption("Conway's game of life")
     timer = pygame.time.Clock()
 
+    # A flag for the state of the game of life, becomes True when the player
+    # finishes laying out the grid and presses enter
     running = False
 
-    GRID_W = generate_grid_points(BLOCK_SIZE[0], WIN_WIDTH)
-    GRID_H = generate_grid_points(BLOCK_SIZE[1], WIN_HEIGHT)   
+    # List of grid lines coordinates on the x axis
+    GRID_W = generate_grid_lines_coordinates(BLOCK_SIZE[0], WIN_WIDTH)
+    # List of grid lines coordinates on the y axis
+    GRID_H = generate_grid_lines_coordinates(BLOCK_SIZE[1], WIN_HEIGHT)
 
-    
+    # Draw the grid on the screen
     draw_grid(screen, GRID_W, GRID_H, grid)
 
     while 1:
+        # Main loop
         time.sleep(1/24) #24 FPS
+
+        # Some event handling
         for event in pygame.event.get():
+
+            # Quit events
             if event.type == pygame.QUIT:
                 raise SystemExit("QUIT")
             if event.type == KEYDOWN and event.key == K_ESCAPE:
                 raise SystemExit("ESCAPE")
+
+            # Simulation start
             if event.type == KEYDOWN and event.key == K_RETURN:
                 running = True
                 print("Game of life starting")
+
+            # Mouse click
             if event.type == MOUSEBUTTONDOWN and running == False:
                 draw_block()
                 draw_grid(screen, GRID_W, GRID_H, grid)
 
+        # If the simulation has started -> update the grid on the screen
         if running:
             update_grid(screen, grid)
             draw_grid(screen, GRID_W, GRID_H, grid)
-            
 
+        # Draw the new frame on the screen
         pygame.display.update()
 
-main()
+if __name__ == "__main__":
+
+    main()
