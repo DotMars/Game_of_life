@@ -28,7 +28,7 @@ def reproduction(x): #Any dead cell with exactly three live neighbours becomes a
 
 
 import pygame
-from pygame import *
+
 import numpy as np
 import time
 
@@ -184,16 +184,16 @@ def main():
             # Quit events
             if event.type == pygame.QUIT:
                 raise SystemExit("QUIT")
-            if event.type == KEYDOWN and event.key == K_ESCAPE:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 raise SystemExit("ESCAPE")
 
             # Simulation start
-            if event.type == KEYDOWN and event.key == K_RETURN:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                 running = True
                 print("Game of life starting")
 
             # Mouse click
-            if event.type == MOUSEBUTTONDOWN and running == False:
+            if event.type == pygame.MOUSEBUTTONDOWN and running == False:
                 draw_block()
                 draw_grid(screen, GRID_W, GRID_H)
 
