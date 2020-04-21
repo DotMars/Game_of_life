@@ -1,6 +1,7 @@
 ###################################
-# __author__ = dotMars
 # __name__ = Conway's game of life
+# __author__ = "dotMars"
+# __license__ = https://www.gnu.org/licenses/gpl-3.0.en.html
 ###
 
 ################# Rules
