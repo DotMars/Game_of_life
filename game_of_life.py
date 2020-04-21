@@ -161,7 +161,6 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, FLAGS, DEPTH)
     pygame.display.set_caption("Conway's game of life")
-    timer = pygame.time.Clock()
 
     # A flag for the state of the game of life, becomes True when the player
     # finishes laying out the grid and presses enter
